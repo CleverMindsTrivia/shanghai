@@ -17,7 +17,7 @@ try{
   await page.getByRole('button',{name:'Draw from deck'}).click();assert.equal(await page.locator('[data-card]').count(),12);
   assert(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),`table overflow at ${width}`);
   await page.screenshot({path:`test-results/table-${width}.png`,fullPage:true});
-  await page.getByRole('button',{name:'How to play'}).click();assert(await page.locator('#rules').isVisible());await page.getByRole('button',{name:'Close rules'}).click();
+  await page.getByRole('button',{name:'Menu',exact:true}).click();await page.getByRole('button',{name:'How to play'}).click();assert(await page.locator('#rules').isVisible());await page.getByRole('button',{name:'Close rules'}).click();
   await page.reload();assert.equal(await page.locator('[data-card]').count(),12);
   await page.close();
  }
@@ -33,8 +33,8 @@ try{
   },mode);await page.reload();
  };
  await setup('lay');
- for(const rank of [2,3]){for(const suit of ['spades','hearts','clubs','diamonds'])await page.locator(`[data-card="0-${suit}-${rank}"]`).click();await page.getByRole('button',{name:'+ Set',exact:true}).click();}
- await page.getByRole('button',{name:'Lay all down'}).click();assert.equal(await page.locator('[data-meld]').count(),2);assert.equal(await page.locator('[data-card]').count(),4);
+ for(const rank of [2,3]){for(const suit of ['spades','hearts','clubs','diamonds'])await page.locator(`[data-card="0-${suit}-${rank}"]`).click();await page.getByRole('button',{name:/^Stage /}).click();await page.getByRole('button',{name:'+ Set',exact:true}).click();}
+ await page.getByRole('button',{name:/^Stage /}).click();await page.getByRole('button',{name:'Lay all down'}).click();assert.equal(await page.locator('[data-meld]').count(),2);assert.equal(await page.locator('[data-card]').count(),4);
  let saved=await page.evaluate(()=>JSON.parse(localStorage.getItem('shanghai.practice.v1')));assert(saved.players[0].down);assert.equal(saved.melds[0].cards.length,4);
  await setup('shanghai');await page.getByRole('button',{name:'SHANGHAI!',exact:true}).click();await page.locator('[data-card="0-spades-9"]').click();await page.getByRole('button',{name:'Finish Shanghai'}).click();saved=await page.evaluate(()=>JSON.parse(localStorage.getItem('shanghai.practice.v1')));assert.equal(saved.melds[0].cards.length,4);assert.equal(saved.players[0].hand.length,1);assert.equal(saved.phase,'draw');assert.equal(saved.turn,2);
  await setup('buy');await page.getByRole('button',{name:/Buy \+ penalty/}).click();saved=await page.evaluate(()=>JSON.parse(localStorage.getItem('shanghai.practice.v1')));assert.equal(saved.players[0].buys,1);assert.equal(saved.players[0].hand.length,4);assert.equal(saved.phase,'draw');

@@ -76,3 +76,11 @@ Jokers: Trinity and Eli.
 ## Validation
 
 `npm test` checks physical-card conservation, deal counts, ace boundaries, disjoint contracts, complete laydowns, extensions, buy limits and penalties, Shanghai ordering and no chaining, immediate round endings, score accumulation, and five seeded complete seven-round simulations.
+
+### Stable table and overlapping hand
+
+All four practice seats and each round's two or three combination slots are reserved from the start. Set ranks and run ranges stay in a consistent summary format; tapping a group opens its full cards. With a hand selection, legal destinations are highlighted and adding cards requires an explicit confirmation. Shanghai keeps its existing reaction flow.
+
+The hand uses two overlapping rows, designed around 17 cards, with large exposed rank/suit labels. Draws append instead of re-sorting. New cards are outlined and marked NEW; a bought penalty card is marked P+1, with its full label beside the hand actions. Card order and markers survive refresh; markers clear after your discard. Sorting is explicit. Private staging, scores, history, and rules open in dialogs to keep the table stationary. Select cards, open Stage, and prepare a set/run; the panel closes so you can select the next group.
+
+Validation: engine and application unit tests cover all seven rounds, buying/Shanghai, draft persistence, appended card order and markers, 17-card row rendering, reserved seats/slots, and explicit play confirmation. Real-device Safari viewport and touch testing remains necessary; DOM/unit checks do not prove visual fit on every phone.
