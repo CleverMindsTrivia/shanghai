@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+<head>
+ <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+ <meta name="theme-color" content="#101c25">
+ <meta name="description" content="Your family’s seven-round Shanghai card game. Practice at a private table against three computer players.">
+ <title>Shanghai · The family table</title>
+ <link rel="icon" href="/icon.svg" type="image/svg+xml">
+ <link rel="stylesheet" href="/styles.css">
+ <script type="module" src="/app.mjs"></script>
+</head>
+<body>
+ <div id="app"></div>
+ <div id="notice" class="notice" role="status" aria-live="polite"></div>
+ <dialog id="rules">
+  <div class="dialog-head"><span class="eyebrow">PULL UP A CHAIR</span><button data-action="close-rules" class="icon-button" aria-label="Close rules">×</button></div>
+  <h2>How our table plays.</h2>
+  <p>Eleven cards. Seven rounds. A whole lot of family business.</p>
+  <ol class="rule-list">
+   <li><strong>Draw, play, discard.</strong> Draw from the deck or take the top discard. Lay down your whole round’s contract together; extra cards may be included in each set or run.</li>
+   <li><strong>Sets & runs.</strong> A set has 3 or more of the same rank. A run has 4 or more consecutive cards of one suit. Aces can be low or high, but K–A–2 never wraps.</li>
+   <li><strong>Build on the table.</strong> After you lay down, add cards to your own or anyone else’s combinations. You may go out by playing or discarding, including round seven.</li>
+   <li><strong>Buy a discard.</strong> Up to 3 buys each round. Take the discard plus one penalty card. The next player gets normal first refusal. In this practice game, computer players always decline buys, so your eligible buy is accepted.</li>
+   <li><strong>Call Shanghai!</strong> If another player discards a card that fits a combination on the table, claim it before the reaction window closes. It moves onto that combination, then you discard any card. You may call before laying down. Your replacement discard cannot trigger another Shanghai.</li>
+   <li><strong>Lowest score wins.</strong> Cards 2–9 = 5 points; 10/J/Q/K = 10; aces = 15. Cards left in your hand count against you when someone goes out. The round ends immediately.</li>
+  </ol>
+  <p class="fine-print">Practice edition · Two regular decks · Jokers are not in play. Online rooms and family artwork are planned for the next stage. Computers do not buy or race you to Shanghai.</p>
+ </dialog>
+ <dialog id="new-game-dialog">
+  <h2>Start a fresh table?</h2><p>This will replace the saved practice game on this device.</p>
+  <div class="dialog-actions"><button class="button secondary" data-action="cancel-new">Keep playing</button><button class="button primary" data-action="confirm-new">Start fresh</button></div>
+ </dialog>
+</body></html>
