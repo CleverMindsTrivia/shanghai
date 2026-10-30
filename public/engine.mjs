@@ -35,14 +35,14 @@ export function findContract(hand,round) {
 const requireRule=(ok,message)=>{if(!ok)throw new Error(message);};
 export function newGame(names=['Thomas','Mom','Dad','Dusti'],rng=Math.random) {
  requireRule(names.length>=2&&names.length<=8,'Choose 2–8 players.');
- const game={version:1,round:0,dealer:names.length-1,players:names.map((name,i)=>({id:i,name,score:0,hand:[],down:false,buys:0})),melds:[],discard:[],stock:[],history:[],roundScores:[],finished:false,roundOver:false,phase:'draw',turn:0,reaction:null,lastWinner:null};deal(game,rng);return game;
+ const game={version:1,round:0,dealer:Math.floor(rng()*names.length),players:names.map((name,i)=>({id:i,name,score:0,hand:[],down:false,buys:0})),melds:[],discard:[],stock:[],history:[],roundScores:[],finished:false,roundOver:false,phase:'draw',turn:0,reaction:null,lastWinner:null};deal(game,rng);return game;
 }
 export function log(g,message){g.history.push(message);if(g.history.length>80)g.history.shift();}
 export function deal(g,rng=Math.random) {
  g.stock=shuffle(makeDeck(g.players.length<=6?2:3),rng);g.discard=[];g.melds=[];g.reaction=null;g.roundOver=false;g.phase='draw';
  g.players.forEach(p=>{p.hand=[];p.down=false;p.buys=0;});
  for(let i=0;i<11;i++)for(const p of g.players)p.hand.push(g.stock.pop());
- g.discard.push(g.stock.pop());g.turn=(g.dealer+1)%g.players.length;log(g,`Round ${g.round+1}: ${contractLabel(g.round)}.`);
+ g.discard.push(g.stock.pop());g.turn=(g.dealer+1)%g.players.length;log(g,`Round ${g.round+1}: ${contractLabel(g.round)}. ${g.players[g.dealer].name} deals; ${g.players[g.turn].name} starts to their left.`);
 }
 export function nextRound(g,rng=Math.random){requireRule(g.roundOver&&!g.finished,'Finish this round first.');g.round++;g.dealer=(g.dealer+1)%g.players.length;deal(g,rng);}
 function live(g){requireRule(!g.roundOver&&!g.finished,'This round has ended.');}

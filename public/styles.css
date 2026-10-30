@@ -13,3 +13,57 @@ dialog{max-width:590px;max-height:85vh;width:calc(100% - 32px);padding:28px;back
 
 /* Prepared groups remain private until the complete contract is revealed. */
 .staged-group.private-group{display:block;min-width:145px;max-width:100%;padding:10px 12px}.private-group-heading{display:flex;justify-content:space-between;align-items:center;gap:12px;color:var(--gold);font-size:9px;letter-spacing:1px}.private-backs{display:flex;gap:4px;margin:10px 0;flex-wrap:wrap;max-width:260px}.mini-back{display:grid;place-items:center;width:27px;height:38px;background:#102638;border:1px solid var(--gold);outline:1px solid #e7bf7d55;outline-offset:-4px;border-radius:3px;color:var(--gold);font-size:13px}.private-group details{font-size:10px;color:var(--muted)}.private-group summary{cursor:pointer;padding:5px 0}.private-group details p{color:var(--ink)}.draft .draft-status{color:var(--gold);margin:12px 0 8px}.reveal-meld{animation:reveal-contract .45s ease-out}@keyframes reveal-contract{from{transform:perspective(700px) rotateX(85deg);opacity:.2}to{transform:perspective(700px) rotateX(0);opacity:1}}@media(prefers-reduced-motion:reduce){.reveal-meld{animation:none}}
+
+.dealer-badge{display:inline-block;color:var(--gold);border:1px solid #e7bf7d66;border-radius:4px;padding:2px 5px;font-size:8px;letter-spacing:.5px;margin-left:6px}.dealer-note{color:var(--muted);font-size:10px;line-height:1.5;margin:10px 0 0}.card.face-art{height:auto;background-size:1300% 100%;background-repeat:no-repeat;background-color:#fffef5;border:0;aspect-ratio:5/7}.card.face-art>span{visibility:hidden}.card.card-back,.mini-back{background-image:url('./cards/back.webp');background-size:100% 100%;background-repeat:no-repeat;border:0}.card-back .back-pattern{visibility:hidden}.mini-back{color:transparent;outline:0}.private-backs .mini-back{aspect-ratio:5/7}
+.face-art[data-suit="spades"][data-rank="1"]{background-image:url("./cards/spades.webp");background-position:0.0% 0}
+.face-art[data-suit="spades"][data-rank="2"]{background-image:url("./cards/spades.webp");background-position:8.333333333333334% 0}
+.face-art[data-suit="spades"][data-rank="3"]{background-image:url("./cards/spades.webp");background-position:16.666666666666668% 0}
+.face-art[data-suit="spades"][data-rank="4"]{background-image:url("./cards/spades.webp");background-position:25.0% 0}
+.face-art[data-suit="spades"][data-rank="5"]{background-image:url("./cards/spades.webp");background-position:33.333333333333336% 0}
+.face-art[data-suit="spades"][data-rank="6"]{background-image:url("./cards/spades.webp");background-position:41.666666666666664% 0}
+.face-art[data-suit="spades"][data-rank="7"]{background-image:url("./cards/spades.webp");background-position:50.0% 0}
+.face-art[data-suit="spades"][data-rank="8"]{background-image:url("./cards/spades.webp");background-position:58.333333333333336% 0}
+.face-art[data-suit="spades"][data-rank="9"]{background-image:url("./cards/spades.webp");background-position:66.66666666666667% 0}
+.face-art[data-suit="spades"][data-rank="10"]{background-image:url("./cards/spades.webp");background-position:75.0% 0}
+.face-art[data-suit="spades"][data-rank="11"]{background-image:url("./cards/spades.webp");background-position:83.33333333333333% 0}
+.face-art[data-suit="spades"][data-rank="12"]{background-image:url("./cards/spades.webp");background-position:91.66666666666667% 0}
+.face-art[data-suit="spades"][data-rank="13"]{background-image:url("./cards/spades.webp");background-position:100.0% 0}
+.face-art[data-suit="hearts"][data-rank="1"]{background-image:url("./cards/hearts.webp");background-position:0.0% 0}
+.face-art[data-suit="hearts"][data-rank="2"]{background-image:url("./cards/hearts.webp");background-position:8.333333333333334% 0}
+.face-art[data-suit="hearts"][data-rank="3"]{background-image:url("./cards/hearts.webp");background-position:16.666666666666668% 0}
+.face-art[data-suit="hearts"][data-rank="4"]{background-image:url("./cards/hearts.webp");background-position:25.0% 0}
+.face-art[data-suit="hearts"][data-rank="5"]{background-image:url("./cards/hearts.webp");background-position:33.333333333333336% 0}
+.face-art[data-suit="hearts"][data-rank="6"]{background-image:url("./cards/hearts.webp");background-position:41.666666666666664% 0}
+.face-art[data-suit="hearts"][data-rank="7"]{background-image:url("./cards/hearts.webp");background-position:50.0% 0}
+.face-art[data-suit="hearts"][data-rank="8"]{background-image:url("./cards/hearts.webp");background-position:58.333333333333336% 0}
+.face-art[data-suit="hearts"][data-rank="9"]{background-image:url("./cards/hearts.webp");background-position:66.66666666666667% 0}
+.face-art[data-suit="hearts"][data-rank="10"]{background-image:url("./cards/hearts.webp");background-position:75.0% 0}
+.face-art[data-suit="hearts"][data-rank="11"]{background-image:url("./cards/hearts.webp");background-position:83.33333333333333% 0}
+.face-art[data-suit="hearts"][data-rank="12"]{background-image:url("./cards/hearts.webp");background-position:91.66666666666667% 0}
+.face-art[data-suit="hearts"][data-rank="13"]{background-image:url("./cards/hearts.webp");background-position:100.0% 0}
+.face-art[data-suit="clubs"][data-rank="1"]{background-image:url("./cards/clubs.webp");background-position:0.0% 0}
+.face-art[data-suit="clubs"][data-rank="2"]{background-image:url("./cards/clubs.webp");background-position:8.333333333333334% 0}
+.face-art[data-suit="clubs"][data-rank="3"]{background-image:url("./cards/clubs.webp");background-position:16.666666666666668% 0}
+.face-art[data-suit="clubs"][data-rank="4"]{background-image:url("./cards/clubs.webp");background-position:25.0% 0}
+.face-art[data-suit="clubs"][data-rank="5"]{background-image:url("./cards/clubs.webp");background-position:33.333333333333336% 0}
+.face-art[data-suit="clubs"][data-rank="6"]{background-image:url("./cards/clubs.webp");background-position:41.666666666666664% 0}
+.face-art[data-suit="clubs"][data-rank="7"]{background-image:url("./cards/clubs.webp");background-position:50.0% 0}
+.face-art[data-suit="clubs"][data-rank="8"]{background-image:url("./cards/clubs.webp");background-position:58.333333333333336% 0}
+.face-art[data-suit="clubs"][data-rank="9"]{background-image:url("./cards/clubs.webp");background-position:66.66666666666667% 0}
+.face-art[data-suit="clubs"][data-rank="10"]{background-image:url("./cards/clubs.webp");background-position:75.0% 0}
+.face-art[data-suit="clubs"][data-rank="11"]{background-image:url("./cards/clubs.webp");background-position:83.33333333333333% 0}
+.face-art[data-suit="clubs"][data-rank="12"]{background-image:url("./cards/clubs.webp");background-position:91.66666666666667% 0}
+.face-art[data-suit="clubs"][data-rank="13"]{background-image:url("./cards/clubs.webp");background-position:100.0% 0}
+.face-art[data-suit="diamonds"][data-rank="1"]{background-image:url("./cards/diamonds.webp");background-position:0.0% 0}
+.face-art[data-suit="diamonds"][data-rank="2"]{background-image:url("./cards/diamonds.webp");background-position:8.333333333333334% 0}
+.face-art[data-suit="diamonds"][data-rank="3"]{background-image:url("./cards/diamonds.webp");background-position:16.666666666666668% 0}
+.face-art[data-suit="diamonds"][data-rank="4"]{background-image:url("./cards/diamonds.webp");background-position:25.0% 0}
+.face-art[data-suit="diamonds"][data-rank="5"]{background-image:url("./cards/diamonds.webp");background-position:33.333333333333336% 0}
+.face-art[data-suit="diamonds"][data-rank="6"]{background-image:url("./cards/diamonds.webp");background-position:41.666666666666664% 0}
+.face-art[data-suit="diamonds"][data-rank="7"]{background-image:url("./cards/diamonds.webp");background-position:50.0% 0}
+.face-art[data-suit="diamonds"][data-rank="8"]{background-image:url("./cards/diamonds.webp");background-position:58.333333333333336% 0}
+.face-art[data-suit="diamonds"][data-rank="9"]{background-image:url("./cards/diamonds.webp");background-position:66.66666666666667% 0}
+.face-art[data-suit="diamonds"][data-rank="10"]{background-image:url("./cards/diamonds.webp");background-position:75.0% 0}
+.face-art[data-suit="diamonds"][data-rank="11"]{background-image:url("./cards/diamonds.webp");background-position:83.33333333333333% 0}
+.face-art[data-suit="diamonds"][data-rank="12"]{background-image:url("./cards/diamonds.webp");background-position:91.66666666666667% 0}
+.face-art[data-suit="diamonds"][data-rank="13"]{background-image:url("./cards/diamonds.webp");background-position:100.0% 0}

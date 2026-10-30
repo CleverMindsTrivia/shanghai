@@ -24,3 +24,11 @@ test('all seven rounds complete across deterministic simulated games without los
   assert(g.finished,`seed ${seed} failed after ${turns} turns`);assert.equal(g.roundScores.length,7);for(const p of g.players)assert.equal(p.score,g.roundScores.reduce((sum,r)=>sum+r.scores[p.id],0));
  }
 });
+
+test('first dealer is randomized and the first player is always to the dealer’s left',()=>{
+ for(let dealer=0;dealer<4;dealer++){
+  const rng=()=> (dealer+.25)/4,g=E.newGame(undefined,rng);
+  assert.equal(g.dealer,dealer);assert.equal(g.turn,(dealer+1)%4);
+  for(let round=1;round<7;round++){g.roundOver=true;E.nextRound(g,rng);assert.equal(g.dealer,(dealer+round)%4);assert.equal(g.turn,(dealer+round+1)%4);E.assertIntegrity(g);}
+ }
+});
