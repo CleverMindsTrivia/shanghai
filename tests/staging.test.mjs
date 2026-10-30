@@ -118,3 +118,14 @@ test('hand long presses block text selection and copy menus without affecting te
  assert.equal(cardButtons.length,a.state.game.players[0].hand.length);
  assert(cardButtons.every(([html])=>html.includes('class="hand-index')),'The rank label must be inside its card button so holding it starts the same gesture.');
 });
+
+test('completed rounds keep the same board layout styles and show scores instead of a hand',()=>{
+ const a=app(fixture());
+ for(let round=0;round<7;round++){
+  const g=a.state.game;g.round=round;g.roundOver=true;g.finished=round===6;g.lastWinner=0;g.phase='ended';g.roundScores=[{round,winner:0,scores:[0,20,30,40]}];a.state.render();
+  assert.match(a.root.innerHTML,/<main class="game-layout playing round-complete">/);
+  assert.equal((a.root.innerHTML.match(/data-owner=/g)||[]).length,4);
+  assert.match(a.root.innerHTML,/class="result-panel"/);
+  assert.doesNotMatch(a.root.innerHTML,/class="hand-panel"/);
+ }
+});
