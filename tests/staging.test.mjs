@@ -44,3 +44,19 @@ test('computer actions and discard windows preserve selection so staging works d
 test('paused table permits private preparation but cannot reveal the contract',()=>{
  const a=app(fixture());a.click('pause');prepare(a,3);prepare(a,7);assert.equal(a.state.groups.length,2);a.click('lay');assert.equal(a.state.game.melds.length,0);
 });
+
+test('interleaved table melds stay grouped by player and retain their original play targets',()=>{
+ const g=fixture(),pool=E.makeDeck();g.melds=[];
+ for(const [rank,owner] of [[2,1],[3,0],[4,1],[5,0]]){
+  const cards=['spades','hearts','clubs'].map(s=>pool.splice(pool.findIndex(c=>c.rank===rank&&c.suit===s),1)[0]);g.melds.push({owner,type:'set',cards});
+ }
+ g.players.forEach(p=>{p.hand=pool.splice(0,3);p.down=p.id<2;});g.discard=[pool.shift()];g.stock=pool;E.assertIntegrity(g);
+ const a=app(g),panels=[...a.root.innerHTML.matchAll(/<section class="owner-panel[^>]*data-owner="(\d+)"[\s\S]*?<\/section>/g)];
+ assert.equal(panels.length,2);assert.equal(panels[0][1],'0');assert.equal(panels[1][1],'1');
+ assert.deepEqual([...panels[0][0].matchAll(/data-meld="(\d+)"/g)].map(m=>m[1]),['1','3']);
+ assert.deepEqual([...panels[1][0].matchAll(/data-meld="(\d+)"/g)].map(m=>m[1]),['0','2']);
+ g.turn=0;g.phase='play';
+ const add=g.stock.splice(g.stock.findIndex(c=>c.rank===2),1)[0];g.players[0].hand.push(add);
+ // The same original target still receives cards after the display is regrouped.
+ E.extend(g,0,0,[add.id]);assert.equal(g.melds[0].owner,1);assert.equal(g.melds[0].cards.length,4);E.assertIntegrity(g);
+});
