@@ -12,7 +12,7 @@ function fixture(){
 }
 function app(g){
  const memory=new Map([['shanghai.practice.v1',JSON.stringify(g)]]),listeners={},root={innerHTML:''},notice={textContent:'',classList:{add(){},remove(){}}},timers=new Map();let timerId=0;
- const context=vm.createContext({E,Set,Map,Date,console,clearTimeout(id){timers.delete(id)},setTimeout(fn){timers.set(++timerId,fn);return timerId;},localStorage:{getItem:k=>memory.get(k),setItem:(k,v)=>memory.set(k,v)},document:{querySelector:s=>s==='#app'?root:notice,addEventListener:(n,f)=>listeners[n]=f}});
+ const context=vm.createContext({E,Set,Map,Date,console,clearTimeout(id){timers.delete(id)},setTimeout(fn){timers.set(++timerId,fn);return timerId;},localStorage:{getItem:k=>memory.get(k),setItem:(k,v)=>memory.set(k,v)},document:{querySelectorAll:()=>[],querySelector:s=>s==='#app'?root:notice,addEventListener:(n,f)=>listeners[n]=f}});
  vm.runInContext(source+`;globalThis.testing={select(ids){selected=new Set(ids)},get game(){return game},get groups(){return staged},get selected(){return selected},stage,save,draftReady,render,cleanDraft};`,context);
  return {state:context.testing,memory,root,tick(){const [id,fn]=timers.entries().next().value;timers.delete(id);fn();},click(action){listeners.click({target:{closest:s=>s==='[data-action]'?{dataset:{action}}:null}});},reload(){return app(JSON.parse(memory.get('shanghai.practice.v1')));}};
 }
