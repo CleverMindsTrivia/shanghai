@@ -90,3 +90,7 @@ Validation: engine and application unit tests cover all seven rounds, buying/Sha
 Hold a card for about a third of a second on touch screens, then drag it to an insertion marker in either row. With a mouse, drag directly. Release outside the hand or press Escape to cancel. A normal tap still selects; a completed drag does not change selection or play/discard cards. The saved order persists across draws, buys, and refreshes. Suit/Rank sorting remains available. Keyboard alternative: focus a card and use Alt+Left or Alt+Right to move it one position.
 
 Automated coverage verifies ordering across rows, preservation of private staged groups and selection, new-card markers, persistence after refresh, and unchanged physical cards/scores. Touch gestures on iOS still need real-device verification.
+
+## Private multiplayer alpha
+
+A separate 2–4 person room build lives at `/multiplayer.html`. It uses a Netlify function and a dedicated Supabase database; server credentials are never shipped to browsers. It is not connected until the backend environment and SQL migration are applied. See [multiplayer setup](docs/multiplayer-setup.md) for the exact setup, device tests, and alpha limitations. Practice mode stays at `/`.
