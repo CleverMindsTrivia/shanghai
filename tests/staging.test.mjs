@@ -14,7 +14,7 @@ function app(g){
  const memory=new Map([['shanghai.practice.v1',JSON.stringify(g)]]),listeners={},root={innerHTML:''},notice={textContent:'',classList:{add(){},remove(){}}},timers=new Map();let timerId=0;
  const panels=new Map();const panel=s=>{if(!panels.has(s))panels.set(s,{innerHTML:'',textContent:'',open:false,showModal(){this.open=true},close(){this.open=false}});return panels.get(s);};
  const context=vm.createContext({E,Set,Map,Date,console,clearTimeout(id){timers.delete(id)},setTimeout(fn){timers.set(++timerId,fn);return timerId;},localStorage:{getItem:k=>memory.get(k),setItem:(k,v)=>memory.set(k,v)},document:{querySelectorAll:()=>[],querySelector:s=>s==='#app'?root:s==='#notice'?notice:panel(s),addEventListener:(n,f)=>listeners[n]=f}});
- vm.runInContext(source+`;globalThis.testing={select(ids){selected=new Set(ids)},get game(){return game},get groups(){return staged},get selected(){return selected},get order(){return sortedHand().map(c=>c.id)},get fresh(){return freshCards},draft,stage,save,draftReady,render,cleanDraft};`,context);
+ vm.runInContext(source+`;globalThis.testing={select(ids){selected=new Set(ids)},get game(){return game},get groups(){return staged},get selected(){return selected},get order(){return sortedHand().map(c=>c.id)},get fresh(){return freshCards},draft,stage,save,draftReady,render,cleanDraft,moveHandCard};`,context);
  return {state:context.testing,memory,root,panel,tick(){const [id,fn]=timers.entries().next().value;timers.delete(id);fn();},meld(index){listeners.click({target:{closest:s=>s==='[data-meld]'?{dataset:{meld:String(index)}}:null}})},click(action){listeners.click({target:{closest:s=>s==='[data-action]'?{dataset:{action}}:null}});},reload(){return app(JSON.parse(memory.get('shanghai.practice.v1')));}};
 }
 const ids=(g,r)=>g.players[0].hand.filter(c=>c.rank===r).map(c=>c.id);
@@ -89,4 +89,20 @@ test('group inspection never plays cards until the explicit confirmation; stale 
  const a=app(g);a.state.select([extra.id]);a.meld(0);assert.equal(a.state.game.melds[0].cards.length,3);assert.match(a.panel('#table-info-body').innerHTML,/confirm-play/);
  a.click('confirm-play');assert.equal(a.state.game.melds[0].cards.length,4);assert(!a.state.game.players[0].hand.some(c=>c.id===extra.id));
  const another=a.state.game.stock.splice(a.state.game.stock.findIndex(c=>c.rank===3),1)[0];a.state.game.players[0].hand.push(another);a.state.select([another.id]);a.meld(0);a.state.game.turn=1;a.click('confirm-play');assert.equal(a.state.game.melds[0].cards.length,4);assert(a.state.game.players[0].hand.some(c=>c.id===another.id));
+});
+
+test('custom hand order moves between rows, survives drawing and reload, and keeps selection and staged groups',()=>{
+ const g=fixture();g.players[0].hand.push(...g.stock.splice(0,10));const a=app(g);
+ prepare(a,3);const original=[...a.state.order],moving=original[0],last=original.at(-1);a.state.select([moving]);
+ assert(a.state.moveHandCard(moving,last,true));assert.equal(a.state.order.at(-1),moving);assert.deepEqual([...a.state.order].slice(0,-1),original.slice(1));
+ assert(a.state.selected.has(moving));assert.equal(a.state.groups.length,1);assert(a.state.groups[0].cards.includes(moving));
+ E.assertIntegrity(a.state.game);const b=a.reload();assert.deepEqual([...b.state.order],[...a.state.order]);assert.equal(b.state.groups.length,1);
+ const before=[...b.state.order];b.click('draw-stock');assert.deepEqual([...b.state.order].slice(0,before.length),before);assert.equal(Object.values(b.state.fresh).join(','),'NEW');
+ const freshId=Object.keys(b.state.fresh)[0];b.state.moveHandCard(freshId,b.state.order[0],false);assert.equal(b.state.order[0],freshId);assert.equal(b.state.fresh[freshId],'NEW');E.assertIntegrity(b.state.game);
+});
+test('reordering rejects missing cards and leaves physical hands and scoring unchanged',()=>{
+ const a=app(fixture()),before=[...a.state.order],cards=JSON.stringify(a.state.game.players[0].hand);
+ assert.equal(a.state.moveHandCard(before[0],before[0]),false);assert.equal(a.state.moveHandCard('missing',before[0]),false);assert.equal(a.state.moveHandCard(before[0],'missing'),false);
+ assert.deepEqual([...a.state.order],before);a.state.moveHandCard(before.at(-1),before[0]);assert.equal(a.state.order[0],before.at(-1));
+ assert.equal(JSON.stringify(a.state.game.players[0].hand),cards);assert.equal(a.state.game.players[0].score,0);assert.equal(a.state.game.melds.length,0);
 });

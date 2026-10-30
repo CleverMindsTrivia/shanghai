@@ -84,3 +84,9 @@ All four practice seats and each round's two or three combination slots are rese
 The hand uses two overlapping rows, designed around 17 cards, with large exposed rank/suit labels. Draws append instead of re-sorting. New cards are outlined and marked NEW; a bought penalty card is marked P+1, with its full label beside the hand actions. Card order and markers survive refresh; markers clear after your discard. Sorting is explicit. Private staging, scores, history, and rules open in dialogs to keep the table stationary. Select cards, open Stage, and prepare a set/run; the panel closes so you can select the next group.
 
 Validation: engine and application unit tests cover all seven rounds, buying/Shanghai, draft persistence, appended card order and markers, 17-card row rendering, reserved seats/slots, and explicit play confirmation. Real-device Safari viewport and touch testing remains necessary; DOM/unit checks do not prove visual fit on every phone.
+
+### Arrange your hand
+
+Hold a card for about a third of a second on touch screens, then drag it to an insertion marker in either row. With a mouse, drag directly. Release outside the hand or press Escape to cancel. A normal tap still selects; a completed drag does not change selection or play/discard cards. The saved order persists across draws, buys, and refreshes. Suit/Rank sorting remains available. Keyboard alternative: focus a card and use Alt+Left or Alt+Right to move it one position.
+
+Automated coverage verifies ordering across rows, preservation of private staged groups and selection, new-card markers, persistence after refresh, and unchanged physical cards/scores. Touch gestures on iOS still need real-device verification.
