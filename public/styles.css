@@ -159,3 +159,8 @@ dialog{font-family:inherit;background:#182831;border-color:#ffffff1a;border-radi
 .hand-card.drop-before::before{left:-5px}.hand-card.drop-after::after{right:-4px}
 .hand-drag-ghost{position:fixed!important;z-index:9999!important;pointer-events:none!important;margin:0!important;transform:rotate(4deg) scale(1.06)!important;box-shadow:0 14px 25px #0007!important;outline:2px solid #83e5c3;outline-offset:1px;cursor:grabbing;opacity:.98}
 @media(prefers-reduced-motion:reduce){.hand-drag-ghost{transform:none!important}}
+
+/* Safari must treat a long press on the label as a card gesture, not text selection. */
+.playing .hand,.playing .hand *,.hand-drag-ghost,.hand-drag-ghost *{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
+.playing .hand .card>.hand-index{visibility:visible;pointer-events:auto;width:max-content;max-width:none;touch-action:none}
+.playing .hand-card:has(.selected) .card>.hand-index{transform:none}

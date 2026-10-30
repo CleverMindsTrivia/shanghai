@@ -15,7 +15,7 @@ function app(g){
  const panels=new Map();const panel=s=>{if(!panels.has(s))panels.set(s,{innerHTML:'',textContent:'',open:false,showModal(){this.open=true},close(){this.open=false}});return panels.get(s);};
  const context=vm.createContext({E,Set,Map,Date,console,clearTimeout(id){timers.delete(id)},setTimeout(fn){timers.set(++timerId,fn);return timerId;},localStorage:{getItem:k=>memory.get(k),setItem:(k,v)=>memory.set(k,v)},document:{querySelectorAll:()=>[],querySelector:s=>s==='#app'?root:s==='#notice'?notice:panel(s),addEventListener:(n,f)=>listeners[n]=f}});
  vm.runInContext(source+`;globalThis.testing={select(ids){selected=new Set(ids)},get game(){return game},get groups(){return staged},get selected(){return selected},get order(){return sortedHand().map(c=>c.id)},get fresh(){return freshCards},draft,stage,save,draftReady,render,cleanDraft,moveHandCard};`,context);
- return {state:context.testing,memory,root,panel,tick(){const [id,fn]=timers.entries().next().value;timers.delete(id);fn();},meld(index){listeners.click({target:{closest:s=>s==='[data-meld]'?{dataset:{meld:String(index)}}:null}})},click(action){listeners.click({target:{closest:s=>s==='[data-action]'?{dataset:{action}}:null}});},reload(){return app(JSON.parse(memory.get('shanghai.practice.v1')));}};
+ return {state:context.testing,memory,root,panel,event(type,event){listeners[type](event)},tick(){const [id,fn]=timers.entries().next().value;timers.delete(id);fn();},meld(index){listeners.click({target:{closest:s=>s==='[data-meld]'?{dataset:{meld:String(index)}}:null}})},click(action){listeners.click({target:{closest:s=>s==='[data-action]'?{dataset:{action}}:null}});},reload(){return app(JSON.parse(memory.get('shanghai.practice.v1')));}};
 }
 const ids=(g,r)=>g.players[0].hand.filter(c=>c.rank===r).map(c=>c.id);
 function prepare(a,r){a.state.select(ids(a.state.game,r));a.click('stage-set');}
@@ -105,4 +105,16 @@ test('reordering rejects missing cards and leaves physical hands and scoring unc
  assert.equal(a.state.moveHandCard(before[0],before[0]),false);assert.equal(a.state.moveHandCard('missing',before[0]),false);assert.equal(a.state.moveHandCard(before[0],'missing'),false);
  assert.deepEqual([...a.state.order],before);a.state.moveHandCard(before.at(-1),before[0]);assert.equal(a.state.order[0],before.at(-1));
  assert.equal(JSON.stringify(a.state.game.players[0].hand),cards);assert.equal(a.state.game.players[0].score,0);assert.equal(a.state.game.melds.length,0);
+});
+
+test('hand long presses block text selection and copy menus without affecting text outside the hand',()=>{
+ const a=app(fixture());let prevented=0;
+ for(const type of ['selectstart','contextmenu']){
+  a.event(type,{target:{closest:s=>s==='.hand'?{}:null},preventDefault(){prevented++}});
+  a.event(type,{target:{closest:()=>null},preventDefault(){throw Error('Outside-hand text should remain selectable');}});
+ }
+ assert.equal(prevented,2);
+ const cardButtons=[...a.root.innerHTML.matchAll(/<button[^>]*data-card="[^"]+"[\s\S]*?<\/button>/g)];
+ assert.equal(cardButtons.length,a.state.game.players[0].hand.length);
+ assert(cardButtons.every(([html])=>html.includes('class="hand-index')),'The rank label must be inside its card button so holding it starts the same gesture.');
 });
