@@ -164,3 +164,27 @@ dialog{font-family:inherit;background:#182831;border-color:#ffffff1a;border-radi
 .playing .hand,.playing .hand *,.hand-drag-ghost,.hand-drag-ghost *{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
 .playing .hand .card>.hand-index{visibility:visible;pointer-events:auto;width:max-content;max-width:none;touch-action:none}
 .playing .hand-card:has(.selected) .card>.hand-index{transform:none}
+
+
+/* Larger central piles, with the exposed discard as the visual focus. */
+@media(max-width:899px){
+ .playing .table-controls{grid-template-columns:180px minmax(0,1fr);min-height:136px;height:auto;gap:12px}
+ .playing .piles{gap:16px;align-items:flex-end}
+ .playing .pile .card{width:64px;height:89.6px}
+ .playing .pile .discard-pile .card,.playing .pile .empty-card{width:80px;height:112px}
+ .playing .pile>span{font-size:10px;line-height:14px}
+}
+.playing .discard-pile{outline:1px solid #efc78588;outline-offset:3px;border-radius:7px}
+.playing .pile:has(.discard-pile)>span{color:var(--ink);font-weight:600}
+@media(max-width:560px){
+ .playing .table-controls{grid-template-columns:136px minmax(0,1fr);min-height:116px;gap:9px}
+ .playing .piles{gap:12px}
+ .playing .pile .card{width:52px;height:72.8px}
+ .playing .pile .discard-pile .card,.playing .pile .empty-card{width:64px;height:89.6px}
+ .playing .pile>span{font-size:9px;line-height:13px}
+}
+@media(min-width:900px){
+ .playing .piles{gap:20px;align-items:flex-end}
+ .playing .pile .card{width:82px;height:114.8px}
+ .playing .pile .discard-pile .card,.playing .pile .empty-card{width:96px;height:134.4px}
+}
