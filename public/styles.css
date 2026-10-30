@@ -188,3 +188,9 @@ dialog{font-family:inherit;background:#182831;border-color:#ffffff1a;border-radi
  .playing .pile .card{width:82px;height:114.8px}
  .playing .pile .discard-pile .card,.playing .pile .empty-card{width:96px;height:134.4px}
 }
+
+/* Rank and suit stay below the exposed discard, clear of the artwork. */
+.playing .pile>.discard-caption{display:flex;align-items:baseline;justify-content:center;gap:4px;min-height:18px;white-space:nowrap}
+.playing .pile>.discard-caption .discard-rank{font:650 16px/18px system-ui,sans-serif;letter-spacing:0;padding:0;margin:0;color:var(--ink)}
+.playing .pile>.discard-caption .red-discard-rank{color:#ff9ca9}
+.playing .pile>.discard-caption>span{font-size:9px;font-weight:400;color:var(--muted)}
