@@ -1,1 +1,11 @@
 #mp-app:has(.playing){min-height:100dvh;display:flex;flex-direction:column}#mp-app:has(.playing)>.topbar{margin:0 auto;padding:0 12px;min-height:44px;width:100%}.mp-entry{max-width:560px;margin:40px auto;padding:20px}.mp-entry h1{font-size:34px;font-weight:650}.mp-entry p{color:var(--muted);line-height:1.6}.mp-entry label{display:block;font-size:13px;margin:20px 0}.mp-entry input{display:block;width:100%;margin-top:7px;background:var(--panel);color:var(--ink);border:1px solid var(--line);border-radius:9px;padding:13px;font-size:16px}.mp-entry-actions{display:flex;gap:10px;flex-wrap:wrap}.mp-code{letter-spacing:4px;overflow-wrap:anywhere}.mp-members{padding:0;list-style:none}.mp-members li{padding:12px 0;border-bottom:1px solid var(--line)}.mp-connection{font-size:10px;color:var(--muted);max-width:170px}.mp-entry .fine-print{font-size:12px}#mp-dialog-error{color:#ffabb4}#mp-dialog .button{margin:5px 0}#mp-app .hand .card{cursor:pointer}#mp-app .card.face-art>.hand-index{visibility:visible}.playing .table-melds .owner-grid{grid-auto-rows:56px}
+
+/* Separate, collapsible voice panel: gameplay polling never replaces audio elements. */
+#room-voice{max-width:1440px;margin:0 auto;padding:8px 16px 0;color:#e9f3f2}
+#room-voice[hidden],[data-voice][hidden]{display:none}
+.room-voice{border:1px solid #35474f;border-radius:14px;background:#14232c}
+.room-voice summary{cursor:pointer;display:flex;justify-content:space-between;gap:16px;padding:12px 16px;font-weight:700;min-height:44px}
+.voice-summary{color:#edc985;font-size:.9rem}
+.voice-body{padding:0 16px 14px}.voice-status{margin:4px 0 12px;font-size:.9rem;line-height:1.4;color:#c5d8d9}
+.voice-controls{display:flex;flex-wrap:wrap;gap:8px}.voice-controls .button,.voice-controls .text-button{min-height:44px;padding:9px 14px;font-size:.85rem}
+.voice-people{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0}.voice-person{display:flex;align-items:center;gap:10px;padding:8px 10px;border:1px solid #3b5156;border-radius:10px;font-size:.8rem}.voice-person span{color:#adc5c9}.voice-speaking{border-color:#6de3ae;box-shadow:0 0 0 1px #6de3ae}.voice-speaking span{color:#6de3ae}.voice-relay{color:#adc5c9;font-size:.75rem;line-height:1.4}

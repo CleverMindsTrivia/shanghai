@@ -12,7 +12,7 @@ function accept(next){if(state&&next.code===state.code&&next.version<state.versi
  if((old?old.game?.round:savedRound)!==next.game?.round){staged=[];fresh={};order=[];}
  else if(old){const added=next.hand.filter(c=>!oldIds.has(c.id));if(added.length&&added.length<=2)fresh=Object.fromEntries(added.map((c,i)=>[c.id,i===1?'P+1':'NEW']));}
  const held=new Set(next.hand.map(c=>c.id));order=order.filter(id=>held.has(id));next.hand.forEach(c=>{if(!order.includes(c.id))order.push(c.id);});selected=new Set([...selected].filter(id=>held.has(id)));staged=staged.filter(m=>m.cards.every(id=>held.has(id)));if(next.game?.players[next.you].down)staged=[];
- fresh=Object.fromEntries(Object.entries(fresh).filter(([id])=>held.has(id)));save();render();
+ fresh=Object.fromEntries(Object.entries(fresh).filter(([id])=>held.has(id)));save();globalThis.dispatchEvent?.(new CustomEvent('shanghai-room',{detail:{code:next.code,you:next.you}}));render();
 }
 async function sync(){if(!session||busy||syncing||document.hidden)return;syncing=true;const room=session.code;try{const next=await api({op:'view',code:room});if(!busy&&session?.code===room)accept(next);}catch(e){connection=e.message;const label=document.querySelector('.mp-connection');if(label)label.textContent=connection;}finally{syncing=false;}}
 async function move(action,payload={}){if(busy||!state)return;busy=true;render();const requestId=crypto.randomUUID();
@@ -52,7 +52,7 @@ document.addEventListener('click',async e=>{try{
  if(action==='scores'){show('Scores',state.game?state.game.players.map(p=>'<p>'+esc(p.name)+': '+p.score+'</p>').join(''):'<p>No scores yet.</p>');return;}
  if(action==='talk'){show('Table talk','<ul>'+(state.game?.history||[]).map(x=>'<li>'+esc(x)+'</li>').join('')+'</ul>');return;}
  if(action==='leave'){show('Leave this room?',`<p>Your seat remains in this room, but this browser will forget its rejoin key. Finish your game before leaving.</p><button class="button primary" data-action="confirm-leave">Leave room</button>`);return;}
- if(action==='confirm-leave'){session=null;state=null;selected.clear();localStorage.removeItem(KEY);lastSignature='';dialog.close();render();return;}
+ if(action==='confirm-leave'){globalThis.dispatchEvent?.(new CustomEvent('shanghai-room',{detail:null}));session=null;state=null;selected.clear();localStorage.removeItem(KEY);lastSignature='';dialog.close();render();return;}
  if(action==='sort'){sortHand();return;}
  if(action==='staging'){staging();return;}if(action==='stage-set'||action==='stage-run'){stage(action==='stage-set'?'set':'run');return;}
  let payload=action==='buy'?{cardId:state.game.discard?.id}:{};if(action==='discard')payload={card:[...selected][0]};if(action==='lay')payload={groups:staged};if(action==='extend')payload={meld:pendingPlay,ids:[...selected]};

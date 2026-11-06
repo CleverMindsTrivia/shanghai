@@ -1,6 +1,7 @@
-export function supabaseStore(url,key,fetcher=fetch){
+export function supabaseStore(url,key,fetcher=fetch,table='shanghai_rooms'){
  if(!url||!key)throw Object.assign(new Error('Private rooms are not connected yet.'),{status:503});
- const base=new URL('/rest/v1/shanghai_rooms',url);if(base.protocol!=='https:')throw Error('Supabase requires HTTPS.');
+ if(!['shanghai_rooms','shanghai_voice'].includes(table))throw Error('Invalid storage table.');
+ const base=new URL('/rest/v1/'+table,url);if(base.protocol!=='https:')throw Error('Supabase requires HTTPS.');
  async function call(method,query,body){const response=await fetcher(base.href+query,{method,headers:{apikey:key,Authorization:'Bearer '+key,'Content-Type':'application/json',Prefer:'return=representation'},body:body?JSON.stringify(body):undefined,signal:AbortSignal.timeout(8000)});if(!response.ok)throw Object.assign(new Error(response.status===409?'Room already exists.':'The room service is unavailable.'),{status:response.status===409?409:503});return response.json();}
  return {
   async create(code,state){await call('POST','',{code,state,version:1});},

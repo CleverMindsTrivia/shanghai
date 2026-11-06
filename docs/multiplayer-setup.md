@@ -1,6 +1,6 @@
 # Private family rooms: first multiplayer build
 
-Status: code ready for a dedicated Supabase project and two-device testing. This is a separate alpha entry point (`/multiplayer.html`); the practice game remains available at `/`.
+Status: multiplayer and optional room voice prepared for backend setup and two-device testing. This is a separate alpha entry point (`/multiplayer.html`); the practice game remains available at `/`.
 
 ## What is implemented
 
@@ -16,7 +16,7 @@ Status: code ready for a dedicated Supabase project and two-device testing. This
 
 ## Connect the backend
 
-1. Create a **separate Supabase project for Shanghai**. Keep the database password private.
+1. Select the Supabase project used for Shanghai. A shared project is supported: these migrations only create Shanghai tables. Keep credentials private.
 2. In that project's SQL Editor, run `supabase/migrations/001_private_rooms.sql` once. It creates a server-only table with RLS enabled and no browser-access policies.
 3. In the **Shanghai Netlify site's** environment variables, add:
    - `SUPABASE_URL`: that project's URL, e.g. `https://PROJECT.supabase.co`.
@@ -53,3 +53,21 @@ No Supabase anon/publishable key or client-side Supabase SDK is required. Browse
 `npm test` covers game rules plus room privacy, authorization, duplicate requests, simultaneous buyers, next-seat priority, expiration, and compare-and-swap transport. `npm run build` copies both entry points and assets.
 
 Keep the existing practice app available during testing. Rollback: remove the alpha link or revert the multiplayer feature commit; do not delete the database to roll back the UI. Revoke/rotate the server key in Supabase if it is ever exposed.
+
+
+## Optional room voice
+
+The multiplayer page has a collapsible **Room voice** panel above the game. Join is opt-in, requires microphone permission, and connects everyone who joins voice in the same room. It includes mute/unmute, speaking and connection indicators, Enable sound, Test speaker, and Leave voice. It works in the lobby and stays connected between rounds. Refreshing requires joining voice again; it never enables the microphone automatically. Practice opponents have no microphone.
+
+1. Run `supabase/migrations/002_room_voice.sql` in the same Supabase project's SQL Editor. It adds `shanghai_voice` with RLS and server-only grants. The existing `SUPABASE_URL` and `SUPABASE_SERVICE_ROLE_KEY` Functions settings are reused. No additional Supabase project or client key is needed.
+2. Deploy this branch/PR preview with those variables available in the Deploy Preview context. `netlify/functions/voice.mjs` relays only signaling; the audio travels through WebRTC. Voice rows are separate from card rows and do not change the gameplay version.
+3. For reliable communication between different Wi-Fi/cellular networks, configure a trusted TURN relay in the **Shanghai Netlify** Functions environment. Use the same provider as Not on the List if available; configuration in Render does not automatically reach Netlify.
+   - `VOICE_TURN_URLS`: comma-separated `turn:`/`turns:` URLs.
+   - Prefer `VOICE_TURN_SECRET` if the relay supports coturn REST HMAC-SHA1 credentials. The function creates one-hour credentials scoped to the room and seat; the signing secret never reaches browsers. Active clients request fresh configuration every 30 minutes.
+   - Otherwise use provider-issued `VOICE_TURN_USERNAME` and `VOICE_TURN_CREDENTIAL`. These relay credentials necessarily reach authenticated room participants. Prefer expiring credentials and rotate static credentials as needed. Do not put credentials in GitHub or chat.
+4. Redeploy after environment changes. On two physical devices, join the same game room, tap Join voice on both, allow microphone access, and use headphones. Confirm **Connected** and hear each other both ways. Test one on Wi-Fi and one on cellular to verify the relay. A speaking light alone does not prove received sound.
+5. If connected but silent, tap Enable sound and Test speaker, check volume and mute. If the status remains Connecting or fails, check TURN/network connectivity. Leave/rejoin retries the session.
+
+Presence expires after 45 seconds without a heartbeat. Signaling is polled every 1.5 seconds while joined; messages are bounded, directed to one seat/session, and retained for at most 90 seconds in the active row (old row data is physically pruned on the next voice request). No audio is recorded or stored by this implementation. Leaving voice or leaving the room stops microphone tracks and peer connections; page exit also closes local audio. Background iOS browser suspension may require rejoining. Voice signaling generates additional Netlify function and database requests while enabled; this is a private family alpha with no public anti-abuse layer.
+
+Automated tests cover authorized seats only, expiry, recipient isolation, signal deduplication/cursors, concurrent joins, stale sessions, mute state, separate storage, and TURN credentials. Mock browser tests cover opt-in microphone access, host seat zero, mute, denied permission, setup failure cleanup, leaving during permission prompts, and room changes. Actual audio transport, iPhone playback, and TURN deployment still need the two-device acceptance test. The Not on the List reference implementation is `CleverMindsTrivia/not-on-the-list/public/voice.mjs` at commit `62bf8c8e94cb76e3b762facc2ec5725cca764094`.
